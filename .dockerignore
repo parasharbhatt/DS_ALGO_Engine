@@ -1,0 +1,7 @@
+venv/
+.git/
+.gitignore
+test_outputs/
+generated_spas/
+tests/
+run_tests.py

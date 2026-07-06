@@ -21,3 +21,6 @@ __pycache__/
 generated_spas/*.html
 test_outputs/*.pdf
 .pytest_cache/
+
+# NEW: Security Exclusions for Deployment Credentials
+deploy_gcp.sh
