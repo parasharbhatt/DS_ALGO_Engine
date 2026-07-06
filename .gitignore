@@ -24,3 +24,4 @@ test_outputs/*.pdf
 
 # NEW: Security Exclusions for Deployment Credentials
 deploy_gcp.sh
+deploy_gcp.bat
