@@ -1,0 +1,23 @@
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Python caching
+**/__pycache__/
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+
+# IDE configurations
+.vscode/
+
+# Local Environment Variables (API Keys)
+.env
+
+
+# Local Application Outputs & Test Reports
+generated_spas/*.html
+test_outputs/*.pdf
+.pytest_cache/

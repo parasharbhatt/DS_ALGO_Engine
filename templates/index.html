@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Engine Dashboard</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+        form { background: #1e293b; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5); }
+        textarea { width: 100%; height: 100px; background: #0f172a; color: #fff; border: 1px solid #475569; border-radius: 4px; padding: 12px; font-size: 16px; box-sizing: border-box; resize: vertical; }
+        button { background: #0284c7; color: white; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; }
+        button:hover { background: #0369a1; }
+        .result-box { margin-top: 30px; background: #1e293b; padding: 25px; border-radius: 8px; border-left: 5px solid #22c55e; }
+        a.action-btn { display: inline-block; background: #22c55e; color: white; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
+        a.action-btn:hover { background: #16a34a; }
+        pre { background: #0f172a; padding: 15px; border-radius: 4px; overflow-x: auto; color: #38bdf8;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DSA App Orchestrator Engine</h1>
+        <p>Type your educational goal. The system handles planning and visual assembly dynamically.</p>
+        
+        <form action="/generate" method="POST">
+            <textarea name="prompt" placeholder="e.g., I want to learn about Bubble Sort using a classic Array structure implemented in Java with an interactive visual step-through animation."></textarea>
+            <button type="submit">Deploy & Build SPA</button>
+        </form>
+
+        <!-- SAFE BLOCK: Only processes variable states if 'success' key exists -->
+        {% if success %}
+        <div class="result-box">
+            <h2>🚀 Execution Complete!</h2>
+            <p><strong>App Successfully Generated:</strong> <code>generated_spas/{{ filename }}</code></p>
+            <h3>Extracted Metadata Specs:</h3>
+            <pre>{{ specs | tojson(indent=2) }}</pre>
+            <a class="action-btn" href="/view/{{ filename }}" target="_blank">Launch Standalone Application</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
