@@ -6,16 +6,12 @@ setlocal enabledelayedexpansion
 :: ==========================================
 set "ENV_FILE=.env"
 
-if not exist "%ENV_FILE%" (
-    echo ERROR: Local operational configuration asset '%ENV_FILE%' not found!
-    echo Please create a .env file containing PROJECT_ID and GEMINI_API_KEY variables.
-    exit /b 1
-)
-
-:: Parse and extract key configurations safely
-for /f "tokens=1,2 delims==" %%A in (%ENV_FILE%) do (
-    if "%%A"=="PROJECT_ID" set "PROJECT_ID=%%B"
-    if "%%A"=="GEMINI_API_KEY" set "GEMINI_API_KEY=%%B"
+if exist "%ENV_FILE%" (
+    :: Parse and extract key configurations safely
+    for /f "tokens=1,* delims==" %%A in (%ENV_FILE%) do (
+        if "%%A"=="PROJECT_ID" if "%PROJECT_ID%"=="" set "PROJECT_ID=%%B"
+        if "%%A"=="GEMINI_API_KEY" if "%GEMINI_API_KEY%"=="" set "GEMINI_API_KEY=%%B"
+    )
 )
 
 if "%PROJECT_ID%"=="" (
@@ -41,7 +37,7 @@ call gcloud config set project %PROJECT_ID%
 
 :: 2. Enable foundational serverless orchestration APIs 
 echo Enabling necessary Cloud APIs...
-call gcloud services enable ://googleapis.com ://googleapis.com ://googleapis.com
+call gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
 
 :: 3. Create a clean artifact management container repository if it doesn't exist
 echo Setting up secure container engine repository...

@@ -8,25 +8,23 @@ set -e
 # ==========================================
 ENV_FILE=".env"
 
-if [ ! -f "$ENV_FILE" ]; then
-    echo "ERROR: Local operational configuration asset '$ENV_FILE' not found!"
-    echo "Please create a .env file containing PROJECT_ID and GEMINI_API_KEY variables."
-    exit 1
+# Load configuration from the process environment or from a local .env file.
+# Values are extracted without evaluating arbitrary shell expressions.
+if [ -f "$ENV_FILE" ]; then
+    ENV_PROJECT_ID=$(sed -n 's/^PROJECT_ID=//p' "$ENV_FILE" | tr -d '\r' | sed 's/^["'"'"']//;s/["'"'"']$//')
+    ENV_GEMINI_API_KEY=$(sed -n 's/^GEMINI_API_KEY=//p' "$ENV_FILE" | tr -d '\r' | sed 's/^["'"'"']//;s/["'"'"']$//')
 fi
 
-# Extract and sanitize variable declarations directly from the environment file
-# PROJECT_ID=$(grep -E '^PROJECT_ID=' "$ENV_FILE" | cut -d '=' -f2- | tr -d '\r' | tr -d '"' | tr -d "'")
-# GEMINI_API_KEY=$(grep -E '^GEMINI_API_KEY=' "$ENV_FILE" | cut -d '=' -f2- | tr -d '\r' | tr -d '"' | tr -d "'")
-PROJECT_ID=pb-project-codelab-1
-GEMINI_API_KEY=***REMOVED***
+PROJECT_ID="${PROJECT_ID:-$ENV_PROJECT_ID}"
+GEMINI_API_KEY="${GEMINI_API_KEY:-$ENV_GEMINI_API_KEY}"
 # Strict evaluation boundary guards
 if [ -z "$PROJECT_ID" ]; then
-    echo "ERROR: Variable 'PROJECT_ID' is empty or missing inside your .env file."
+    echo "ERROR: PROJECT_ID is missing. Set it in the environment or in $ENV_FILE."
     exit 1
 fi
 
 if [ -z "$GEMINI_API_KEY" ]; then
-    echo "ERROR: Variable 'GEMINI_API_KEY' is empty or missing inside your .env file."
+    echo "ERROR: GEMINI_API_KEY is missing. Set it in the environment or in $ENV_FILE."
     exit 1
 fi
 
@@ -45,9 +43,9 @@ gcloud config set project "$PROJECT_ID"
 
 # 2. Enable foundational serverless orchestration APIs 
 echo "Enabling necessary Cloud APIs..."
-gcloud services enable ://googleapis.com \
-                       ://googleapis.com \
-                       ://googleapis.com
+gcloud services enable run.googleapis.com \
+                       cloudbuild.googleapis.com \
+                       artifactregistry.googleapis.com
 
 # 3. Create a clean artifact management container repository if it doesn't exist
 echo "Setting up secure container engine repository..."
