@@ -2,26 +2,48 @@
 .venv/
 venv/
 ENV/
+env/
 
 # Python caching
-**/__pycache__/
 __pycache__/
+**/__pycache__/
 *.pyc
 *.py[cod]
 *$py.class
+*.pyo
 
 # IDE configurations
 .vscode/
+.idea/
+*.code-workspace
 
 # Local Environment Variables (API Keys)
 .env
-
+.env.*
+!.env.example
 
 # Local Application Outputs & Test Reports
 generated_spas/*.html
 test_outputs/*.pdf
+.coverage
+htmlcov/
 .pytest_cache/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
 
-# NEW: Security Exclusions for Deployment Credentials
-deploy_gcp.sh
-deploy_gcp.bat
+# Build and packaging artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary and log files
+*.log
+*.tmp
+*.bak

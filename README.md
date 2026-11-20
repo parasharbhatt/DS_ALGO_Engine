@@ -1,85 +1,162 @@
-# AI-Driven Data Structures & Algorithms Orchestration Engine
+# AI-Driven Data Structures & Algorithms Engine
 
-An automated, asynchronous educational engine built with **FastAPI** and the **Google Gemini Pro SDK**. This ecosystem leverages two specialized AI agents that coordinate over an internal data protocol to synthesize standalone, interactive, single-file (`.html`) educational applications. Engineered for local development inside **VS Code** and cost-optimized serverless deployment on **Google Cloud Platform (GCP)**.
+An AI-assisted educational application that turns a natural-language data structures and algorithms goal into a self-contained interactive HTML application.
 
----
+## Project Category
 
-## 🏗️ Architecture & Agent Ecosystem
+**Educational Technology / AI Developer Tool**
 
-The workspace abstracts agent interactions into a structured, highly deterministic code-generation assembly line. By using strict data structures for inter-agent communication, token overhead is minimized.
+- Data structures and algorithms visualization
+- Generative AI application
+- Interactive web application generator
+- Python backend with a serverless deployment option
 
-### Types of Agents (Agent Development Kit - ADK)
-1. **DS_Algo_PL_Selection_Agent (Strategic Planner)**: 
-   * **Role**: Parses unstructured natural language user goals to establish metadata scope.
-   * **Framework**: Integrates raw Gemini structured schema inference powered by Pydantic models.
-   * **Execution Pattern**: Low-temperature (0.1) semantic parsing to enforce deterministic extraction.
-2. **Web_Developer_Agent (Visual Systems Builder)**:
-   * **Role**: Acts as a pure, zero-dependency visual and functional source-code generator.
-   * **Framework**: High-context prompt blueprint compilation using Gemini models.
-   * **Execution Pattern**: Generates single, self-contained HTML files containing native embedded CSS, Vanilla JavaScript state machine logic, and procedural inline SVGs.
+## Features
 
-### Inter-Agent Protocol (IAP)
-The communication channel uses a strict, validated **JSON schema pipeline** powered by Pydantic models to passing data. This architecture eliminates multi-turn conversational token overhead:
+- Converts prompts such as "Bubble Sort using an Array in Java" into an educational SPA.
+- Uses Pydantic schemas to validate Gemini-generated metadata.
+- Generates HTML with embedded CSS, vanilla JavaScript, SVG flowcharts, and Big-O analysis.
+- Provides a local dashboard for generating and launching standalone applications.
+- Includes unit tests and timestamped PDF test reports.
+- Supports Docker and Google Cloud Run deployment.
+
+## Tools and Technologies
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini-4285F4?style=for-the-badge&logo=googlegemini&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=000000)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white)
+
+Additional tools:
+
+- Jinja2 templates
+- Uvicorn
+- python-dotenv
+- ReportLab
+- unittest
+- Google Cloud Run and Google Cloud Artifact Registry
+
+## Project Structure
 
 ```text
-[User Prompt] ──> (Selection Agent) ──> [Validated JSON Protocol] ──> (Web Dev Agent) ──> [Self-Contained SPA]
+DS_Algo_Engine/
+├── app/
+│   ├── __init__.py
+│   ├── selection.py       # Gemini planning agent and Pydantic schema
+│   └── web_dev.py         # Gemini SPA generation agent
+├── generated_spas/        # Generated standalone HTML applications
+├── templates/
+│   └── index.html         # FastAPI dashboard template
+├── tests/
+│   ├── __init__.py
+│   └── test_pipeline.py   # FastAPI pipeline tests
+├── test_outputs/          # Timestamped PDF test reports
+├── main.py                # FastAPI application and routes
+├── run.py                 # Local Uvicorn server entry point
+├── run_tests.py           # Test runner and PDF report generator
+├── requirements.txt       # Python dependencies
+├── Dockerfile             # Multi-stage container configuration
+├── deploy_gcp.sh          # Google Cloud Linux deployment script
+├── deploy_gcp.bat         # Google Cloud Windows deployment script
+└── README.md
 ```
 
-#### Protocol Schema Specification
-```json
-{
-  "\$defs": {},
-  "properties": {
-    "data_structure": { "title": "Data Structure", "type": "string" },
-    "algorithm": { "title": "Algorithm", "type": "string" },
-    "operations": { "items": { "type": "string" }, "title": "Operations", "type": "array" },
-    "language": { "title": "Language", "type": "string" }
-  },
-  "required": ["data_structure", "algorithm", "operations", "language"],
-  "type": "object"
-}
+## Architecture
+
+```text
+User Prompt
+    │
+    ▼
+Selection Agent ──► Validated Pydantic Specification
+    │
+    ▼
+Web Developer Agent ──► Standalone HTML, CSS, JavaScript, and SVG
+    │
+    ▼
+generated_spas/
 ```
 
----
+The selection agent extracts the data structure, algorithm, operations, and target language. The web developer agent uses that specification to generate a standalone educational application.
 
-## ⚡ MCP Server & Core Capabilities
+## Setup
 
-The FastAPI backend functions as an autonomous **Model Context Protocol (MCP) Server**, providing a bridge between language models and local machine system runtimes.
+### 1. Create a virtual environment
 
-### Agent Skills & Tools Matrix
-* **File System Automation (`FS-WRITE`)**: Writes self-contained educational apps directly to the workspace filesystem (`generated_spas/`).
-* **Visual Verification Engine (`VVE`)**: Programmatically scans output streams for required target tags (`<style>`, `<script>`, `<svg>`).
-* **Algorithmic Analytics Builder (`AAB`)**: Injects precise runtime performance and big-O asymptotic tracking blocks into the UI.
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
 
----
+### 2. Configure environment variables
 
-## 🔒 Production Security Architecture
+Create a `.env` file in the project root:
 
-Designed for zero-trust local and public cloud host runtimes:
-* **Directory Traversal Protection**: The application uses absolute path calculations (`os.path.abspath`) and prefix containment validations to prevent local file inclusion exploits when previewing assets via the dashboard.
-* **Credential Isolation**: Runtime secrets (`GEMINI_API_KEY`) and infrastructure scopes (`PROJECT_ID`) are completely isolated within an untracked `.env` schema, ensuring deployment workflows remain scrubbed.
-* **Container Layer Pruning**: A multi-stage Docker build strips out native C development tools and setup packages, producing an isolated runtime layer.
+```env
+GEMINI_API_KEY=your_api_key
+HOST=127.0.0.1
+PORT=8000
+PROJECT_ID=your_gcp_project_id
+```
 
----
+The API key and project settings must remain local and must not be committed to source control.
 
-## 🚀 Cost-Effective Cloud Deployability (GCP Cloud Run)
+### 3. Run locally
 
-The codebase features an automated cloud deployment loop optimized for Google Cloud Platform (GCP).
-
-### Free-Tier Cloud Run Configuration
-The platform deploys onto **Google Cloud Run** using fine-tuned auto-scaling boundaries:
-* `min-instances=0`: The container scales down to absolute zero when idle, meaning **\$0.00 idle cost**.
-* `max-instances=2`: Mitigates operational spending spikes and blocks denial-of-service pricing exploits.
-* `cpu=1 / memory=512Mi`: Keeps execution profiles well within monthly GCP free-tier parameters.
-
-### Local & Cloud Operational Matrix
-```bash
-# Execute local unit testing engine + Compile Timestamped PDF Report
-python run_tests.py
-
-# Boot regional development server locally
+```powershell
 python run.py
+```
 
-# Trigger container compilation & secure cloud deployment
+Open `http://127.0.0.1:8000`.
+
+## Usage
+
+1. Enter a prompt describing the data structure, algorithm, operations, and implementation language.
+2. Submit the prompt through the dashboard.
+3. Review the validated specification returned by the selection agent.
+4. Launch the generated standalone application.
+
+Example prompt:
+
+```text
+Build a Bubble Sort app using an Array in Java with compare, swap, and step-through operations.
+```
+
+## Testing
+
+Run the test suite and generate a PDF report:
+
+```powershell
+python run_tests.py
+```
+
+Reports are written to `test_outputs/`. Generated applications are written to `generated_spas/`.
+
+## Docker
+
+Build and run the application with Docker:
+
+```powershell
+docker build -t dsa-engine .
+docker run --rm -p 8080:8080 --env-file .env dsa-engine
+```
+
+Open `http://localhost:8080`.
+
+## Google Cloud Run
+
+Set the required values in `.env`, then use the deployment script for your platform:
+
+```powershell
+.\deploy_gcp.bat
+```
+
+On Linux or macOS:
+
+```bash
 ./deploy_gcp.sh
 ```
